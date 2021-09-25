@@ -8,16 +8,19 @@ import { styled, css, theme } from 'gatsby-theme-stitches/src/config';
 import SEO from "../components/seo";
 
 export const query = graphql`
-	query MyQuery {
-		allPostsJson {
+	{
+		allPostsJson(
+			sort: { fields: [title], order: ASC}
+		) {
 		  edges {
 			node {
+			  id
 			  title
 			  content
 			}
 		  }
 		}
-	  }
+	}
 `
 const IndexPage: React.FC<any> = ({ data }) => {
 	const posts = data.allPostsJson.edges
@@ -31,7 +34,9 @@ const IndexPage: React.FC<any> = ({ data }) => {
 				<Title> Posts </Title>
 				<List>
 					{posts.map((post: any) => (
-						<ListItem> {post.node.title} </ListItem>
+						<Link key={post.node.id} to={`/post/${post.node.id}`}>
+							<ListItem> {post.node.title} </ListItem>
+						</Link>
 					))}
 				</List>
 			</Container>
